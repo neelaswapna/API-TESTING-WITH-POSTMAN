@@ -32,9 +32,13 @@ Selenium (if used with API testing) → Validates UI after API testing.
 #OUTPUT
 
 [TestNG] Running:
+
 Token: QpwL5tke4Pnpja7X4
+
 User Name: Janet
+
 ===============================================
+
     Default Suite
     Tests run: 2, Failures: 0, Skipped: 0
 ===============================================
