@@ -1,0 +1,37 @@
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class RealTimeAPITest {
+    private static String token;
+
+    @Test(priority = 1)
+    public void testLoginAPI() {
+        Response response = RestAssured
+                .given()
+                .contentType("application/json")
+                .body("{ \"email\": \"eve.holt@reqres.in\", \"password\": \"cityslicka\" }")
+                .post("https://reqres.in/api/login");
+
+        Assert.assertEquals(response.getStatusCode(), 200, "Login API Failed!");
+
+        token = response.jsonPath().getString("token");
+        System.out.println("Token: " + token);
+        Assert.assertNotNull(token, "Token is null");
+    }
+
+    @Test(priority = 2, dependsOnMethods = "testLoginAPI")
+    public void testGetUserDetails() {
+        Response response = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + token)  // Token is not required in this example API
+                .get("https://reqres.in/api/users/2");
+
+        Assert.assertEquals(response.getStatusCode(), 200, "User Details API Failed!");
+
+        String name = response.jsonPath().getString("data.first_name");
+        System.out.println("User Name: " + name);
+        Assert.assertNotNull(name, "User name is null");
+    }
+}
